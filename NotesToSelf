@@ -1,0 +1,5 @@
+Current status: 
+
+Not working in Docker Compose. Looks like the connection to the database is failing.
+
+Need to look into how we'll load the database container separately in AWS.

@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nodejs:
+    build:
+      context: '..'
+      dockerfile: 'docker/Dockerfile'
+    ports:
+    - '8080:8080'
+    depends_on:
+    - mongodb
+    environment:
+      DATABASE_HOST: mongodb
+      DATABASE_NAME: service
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
+    volumes:
+        - ./.docker/mongodb/mongod.conf:/etc/mongod.conf
+        - ./.docker/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
+        - ./.docker/mongodb/data/db/:/data/db/
+        - ./.docker/mongodb/data/log/:/var/log/mongodb/
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root
+        MONGO_INITDB_DATABASE: service
+    ports:
+        - "27017:27017"
+    command: ["-f", "/etc/mongod.conf"]
